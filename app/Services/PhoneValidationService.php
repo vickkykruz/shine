@@ -9,12 +9,21 @@ class PhoneValidationService
 	private $apiKey;
     private $apiUrl;
 	
+	/**
+     * This is the construct method for this class
+     */
 	public function __construct()
     {
         $this->apiKey = config('services.abstract_api.key');
         $this->apiUrl = 'https://phonevalidation.abstractapi.com/v1/';
     }
 	
+	/**
+     * Get the information of that number in json Object.
+     *
+     * @param int $phoneNumber
+     * @return json
+     */
 	public function vaildatePhone($phoneNumber)
     {
         $client = new Client();

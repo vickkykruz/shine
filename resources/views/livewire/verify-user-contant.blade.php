@@ -193,7 +193,7 @@
                                                                             <img class="h-5 w-5 me-2" src="https://flagsapi.com/{{ $country['country_short_name'] }}/flat/32.png"> +{{ $country['country_phone_code'] }}
                                                                         </button>
                                                                         <div class="relative w-full">
-                                                                            <input type="text" id="phone-input" name="phone-input" wire:model="insertNewNumber" value="{{ $this->getUserInfo()->mobileNumber }}" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" maxlength="10" placeholder="123-456-7890">
+                                                                            <input type="text" id="phone-input" name="phone-input" wire:model="insertNewNumber" value="{{ optional($this->getUserInfo())->mobileNumber ?? '' }}" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" maxlength="10" placeholder="123-456-7890">
                                                                         </div>
                                                                     </div>
                                                                 </div>

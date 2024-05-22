@@ -54,9 +54,21 @@
     {{-- Be like water. --}}
     @if ($userData)
 		@if (session('error'))
-			<div class="alert alert-danger">
-				{{ session('error') }}
-			</div>
+			<div id="alert-2" class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+				<svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+				  <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+				</svg>
+				<span class="sr-only">Info</span>
+				<div class="ms-3 text-sm font-medium">
+				  {{ session('error') }}
+				</div>
+				<button type="button" class="ms-auto -mx-1.5 -my-1.5 bg-red-50 text-red-500 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 hover:bg-red-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-800 dark:text-red-400 dark:hover:bg-gray-700" data-dismiss-target="#alert-2" aria-label="Close">
+				  <span class="sr-only">Close</span>
+				  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+				  </svg>
+				</button>
+			  </div>
 		@endif
         <form action="{{ route('post_request_user_info') }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -65,7 +77,15 @@
                     <p class="font-medium text-lg mb-2">Profile Photo</p>
 
                     <div class="user-img" style="display:flex; justify-content:center" >
-                        <img src="{{ $userData->profile_photo_path ? asset('storage/' .$userData->profile_photo_path) : asset('build/assets/images/Liza-happy-cat-with-laptop-in-christmas-costume-drinking-tea-2f6120ee-b8e0-4f56-8d70-e0bad66f07ee-1.jpg') }}" alt="{{ $userData->name }}'s Avatar" class="rounded-lg object-cover object-center" style="width: 250px; height: 250px;">
+					
+                        <img src="{{ $userData->profile_photo_path ?
+								(Str::startsWith($userData->profile_photo_path, ['http', 'https']) ?
+									$userData->profile_photo_path :
+									asset($userData->profile_photo_path)
+								) :
+								asset('build/assets/images/Liza-happy-cat-with-laptop-in-christmas-costume-drinking-tea-2f6120ee-b8e0-4f56-8d70-e0bad66f07ee-1.jpg')
+							}}" 
+						   alt="{{ $userData->name }}'s Avatar" class="rounded-lg object-cover object-center" style="width: 250px; height: 250px;">
                     </div>
                     <div class="md:col-span-5 mt-3">
                         <label class="block mb-1 text-sm font-medium text-gray-900" for="file_input">Change Profile Photo</label>

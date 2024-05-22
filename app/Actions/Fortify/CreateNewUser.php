@@ -7,13 +7,21 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
 use Laravel\Jetstream\Jetstream;
-use Laravolt\Avatar\Facade as Avatar;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use App\Services\GravatarService;
+use Illuminate\Support\Facades\Log;
 
 class CreateNewUser implements CreatesNewUsers
 {
     use PasswordValidationRules;
+	
+	protected $gravatarService;
+
+    // Inject GravatarService into the controller
+    public function __construct(GravatarService $gravatarService)
+    {
+        $this->gravatarService = $gravatarService;
+    }
 
     /**
      * Validate and create a newly registered user.
@@ -36,23 +44,27 @@ class CreateNewUser implements CreatesNewUsers
 			'email' => $input['email'],
 			'password' => Hash::make($input['password']),
 			'bind_id' => Str::uuid(),
-			'profile_photo_path' => $input['profile_photo_path'] ?? null,
 		]);
+		
+		// Using Gravatar to get the image
+        $user_image = $this->getGravatarUrl($user->email, 250);
+		Log::info('Gravater User Profile link: '. $user_image);
 
-		// Generate an avatar for the user using their name
-        $avatar = Avatar::create($user->name)->toBase64();
-        
-        // Save the avatar to a file and update the path
-        $avatarPath = 'images/users/avatar-' . Str::uuid() . '.png';
-        Storage::put('public/' . $avatarPath, base64_decode($avatar));
-        $user->profile_photo_path = $avatarPath;
+        // Update user's profile photo path
+        $user->profile_photo_path = $user_image ? $user_image : null;
+
         $user->save();
-
+		
 		return $user;
 	}
 	
 	protected function passwordRules()
     {
         return ['required', 'string', 'min:8', 'confirmed'];
+    }
+	
+	protected function getGravatarUrl($email, $size)
+    {
+        return $this->gravatarService->getGravatarUrl($email, $size);
     }
 }
