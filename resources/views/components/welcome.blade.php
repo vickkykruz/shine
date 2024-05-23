@@ -6,9 +6,12 @@
 		@case(3)
             @livewire('verify-user-contant', ['userData' => $userData, 'userInfo' => $userInfo])
             @break
-			
+		@case(4)
+            @livewire('company-info', ['userData' => $userData, 'userInfo' => $userInfo])
+        @break
+		
         @default
-            <h5 class="text-center text-danger">Page Error</h5>
+            @livewire('page-error')
     @endswitch
 </div>
 

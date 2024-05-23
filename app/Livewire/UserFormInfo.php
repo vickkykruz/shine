@@ -47,8 +47,6 @@ class UserFormInfo extends Component
 			
 			// Check if a profile photo was uploaded
 			if ($request->hasFile('user_profile')) {
-				Log::info("Yes. I have an image");
-				Log::info("User Data: ". $user);
 				
 				// Delete the old profile photo if it exists
 				if ($user->profile_photo_path) {

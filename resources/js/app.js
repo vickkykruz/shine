@@ -1,4 +1,3 @@
 import './bootstrap';
 import 'flowbite';
-
-$wire.dispatch('post-created', { refreshPosts: true });
+import Tagify from '@yaireo/tagify';
