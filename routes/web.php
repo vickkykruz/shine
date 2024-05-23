@@ -34,4 +34,5 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 	Route::post('/select-update', [RecruiterForm::class, 'updateJobDecision'])->name('select.update');
 	Route::get('/show-job-decision', [RecruiterForm::class, 'showJobDecision'])->name('show.job.decision');
 	Route::post('/update-skills', [RecruiterForm::class, 'updateSkills'])->name('update.skills');
+	Route::post('/update-qualifications', [RecruiterForm::class, 'updateQualifications'])->name('update.qualifications');
 });

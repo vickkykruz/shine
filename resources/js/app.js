@@ -86,4 +86,58 @@ document.addEventListener('DOMContentLoaded', function() {
 		},
 		enforceWhitelist: true,
 	});
+	
+	qualificationsTagify.on('add', function(event) {
+		let selectedQualifications = qualificationsTagify.value.map(tag => tag.value);
+		loader.style.display = 'block';
+		fetch(document.querySelector('meta[name="base-url"]').getAttribute('content') + '/update-qualifications', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': csrfToken
+			},
+			body: JSON.stringify({ selectedQualifications: selectedQualifications })
+		})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			// Parse the JSON data from the response body
+			return response.json();
+		})
+		.then(data => {
+			loader.style.display = 'none';
+		})
+		.catch(error => {
+			generalErrAlert.style.display = 'block';
+			loader.style.display = 'none';
+		});
+	});
+	
+	qualificationsTagify.on('remove', function(event) {
+		let selectedQualifications = qualificationsTagify.value.map(tag => tag.value);
+		loader.style.display = 'block';
+		fetch(document.querySelector('meta[name="base-url"]').getAttribute('content') + '/update-qualifications', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-CSRF-TOKEN': csrfToken
+			},
+			body: JSON.stringify({ selectedQualifications: selectedQualifications })
+		})
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+			// Parse the JSON data from the response body
+			return response.json();
+		})
+		.then(data => {
+			loader.style.display = 'none';
+		})
+		.catch(error => {
+			generalErrAlert.style.display = 'block';
+			loader.style.display = 'none';
+		});
+	});
 });

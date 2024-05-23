@@ -295,6 +295,23 @@ class RecruiterForm extends Component
 		return response()->json(['message' => 'Data received successfully']);
 	}
 	
+	public function updateQualifications(Request $request)
+	{
+		$dataQualifications = $request->input('selectedQualifications');
+		
+		// Store the selected user desired job countries as a set
+		if (Redis::exists('client_qualifications')) {
+			Redis::del('client_qualifications');
+		}
+		
+		// Add each selected country to the set
+		foreach ($dataQualifications as $qualification) {
+			Redis::rpush('client_qualifications', $qualification);
+		}
+		
+		return response()->json(['message' => 'Data received successfully']);
+	}
+	
     public function render()
     {
         return view('livewire.recruiter-form');
