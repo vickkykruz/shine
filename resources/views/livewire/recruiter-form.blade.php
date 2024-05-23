@@ -42,16 +42,19 @@
 						<h5 class="text-sm mb-2 font-semibold text-gray-900 card-title">Preferred Job Location(s)</h5>
 						<div class="flex flex-col md:flex-row justify-around items-center mb-3 gap-3 w-full">
 							<div class="w-full md:w-1/3">
+								<label class="block mb-1 text-sm font-semibold text-gray-900" for="countries">Country(ies)</label>
 								<textarea name="selectedcountries" placeholder="Enter desired country(ies)" id="countries" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
 								<label for="countries" class="sr-only">Countries</label>
 							</div>
 							
 							<div class="w-full md:w-1/3">
+								<label class="block mb-1 text-sm font-semibold text-gray-900" for="states">State(s) / Region(s)</label>
 								<textarea name="selectedstates" id="states" placeholder="Enter desired state(s)" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
 								<label for="states" class="sr-only">States / Regions</label>
 							</div>
 							
 							<div class="w-full md:w-1/3">
+								<label class="block mb-1 text-sm font-semibold text-gray-900" for="cities">City(ies)</label>
 								<textarea name="selectedcities" id="cities" placeholder="Enter desired city(ies)" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
 								<label for="cities" class="sr-only">Cities</label>
 							</div>
@@ -432,7 +435,6 @@
 			
 			citiesTagify.on('remove', function(event) {
 				let selectedCities = citiesTagify.value.map(tag => tag.value);
-				const desiredJobWarnText = document.getElementById('desiredJobWarnText');
 				loader.style.display = 'block';
 				fetch(document.querySelector('meta[name="base-url"]').getAttribute('content') + '/update-cities', {
 					method: 'POST',

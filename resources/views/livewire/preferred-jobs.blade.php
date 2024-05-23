@@ -41,7 +41,7 @@
 	</div>
     <div class="flex flex-col md:flex-row justify-around items-center mb-3 gap-3 w-full">
 		<div class="w-full md:w-1/3">
-		<label class="block mb-1 text-sm font-semibold text-gray-900" for="skills">Qualifications</label>
+			<label class="block mb-1 text-sm font-semibold text-gray-900" for="skills">Qualifications</label>
 			<textarea name="selectedcountries" placeholder="Enter Qualifications" id="qualifications" rows="2" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
 			<label for="countries" class="sr-only">Qualifications</label>
 		</div>
@@ -55,25 +55,4 @@
 		</div>
 	</div>
 	
-	<script>
-		let skills = document.querySelector('#skills');
-		let qualifications = document.querySelector('#qualifications');
-		
-		document.addEventListener('DOMContentLoaded', function() {
-			let skillsTagify = new Tagify(skills, {
-				whitelist: ["Communication Skills", "Financial Skills", "Interpersonal Skills", "Problem-Solving Skills", "Technical Skills", "Management Skills", "Sales and Marketing Skills", "Language Skills"],
-				dropdown: {
-					enabled: 0
-				}
-			});
-			
-			let qualificationsTagify = new Tagify(qualifications, {
-				whitelist: Object.values(@json($countries).flatMap(country => country.country_name)),
-				dropdown: {
-					 enabled: 0
-				},
-				enforceWhitelist: true,
-			});
-		});
-	</script>
 </div>

@@ -278,6 +278,23 @@ class RecruiterForm extends Component
 		
 	}
 	
+	public function updateSkills(Request $request)
+	{
+		$dataSkills = $request->input('selectedSkills');
+		
+		// Store the selected user desired job countries as a set
+		if (Redis::exists('client_skills')) {
+			Redis::del('client_skills');
+		}
+		
+		// Add each selected country to the set
+		foreach ($dataSkills as $skill) {
+			Redis::rpush('client_skills', $skill);
+		}
+		
+		return response()->json(['message' => 'Data received successfully']);
+	}
+	
     public function render()
     {
         return view('livewire.recruiter-form');
