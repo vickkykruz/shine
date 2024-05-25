@@ -4,8 +4,10 @@ namespace App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use App\Models\UsersInfo;
+use App\Models\VerifyContact;
 use Illuminate\Contracts\View\View;
+use App\Models\RecruiterInfo;
 
 class DashBoardController extends Controller
 {
@@ -16,17 +18,32 @@ class DashBoardController extends Controller
 		$userRegistrationStatus = $user->registration_status;
 		$userClientId = $user->bind_id;
 
-		// Checking the registration progress
+		// Check the registration progress
 		if (!$userRegistrationStatus) {
 			// Check if the user has uploaded their information
-			$userInfoStatus = DB::table('users_info')->where('clientID', $userClientId)->first();
+			$userInfoStatus = UsersInfo::where('bind_id', $userClientId)->first();
 
 			if ($userInfoStatus) {
-				// Check if the user has uploaded their information
-				$contactVerifyStatus = DB::table('verify_contacts')->where('clientID', $userClientId)->first();
+				// Check if the user has verified their contact information
+				$contactVerifyStatus = VerifyContact::where('bind_id', $userClientId)->first();
 
 				if ($contactVerifyStatus) {
-					// Redirect the user to the company info
+					
+					// Check if the user has verified their contact information
+					$clientRecruiterStatus = RecruiterInfo::where('bind_id', $userClientId)->first();
+					// If employe and orgainastion ....
+					
+					if ($clientRecruiterStatus) {
+						
+						// User has completed all steps, redirect to the company info
+						return view('dashboard', [
+							'user' => $user,
+							'register_status' => '5',
+							'user_info' => $userInfoStatus,
+						]);
+					}
+					
+					// User has completed all steps, redirect to the company info
 					return view('dashboard', [
 						'user' => $user,
 						'register_status' => '4',
@@ -34,7 +51,7 @@ class DashBoardController extends Controller
 					]);
 				}
 
-				// Redirect to the verified contact Page
+				// User has uploaded info but not verified contact, redirect to the contact verification page
 				return view('dashboard', [
 					'user' => $user,
 					'register_status' => '3',
@@ -42,7 +59,7 @@ class DashBoardController extends Controller
 				]);
 			}
 
-			// Redirect the user to upload personal info
+			// User has not uploaded personal info, redirect to upload info page
 			return view('dashboard', [
 				'user' => $user,
 				'register_status' => '2',
@@ -50,7 +67,7 @@ class DashBoardController extends Controller
 			]);
 		}
 
-		// Redirect the user to the welcome page
+		// User is fully registered, redirect to the welcome page
 		return view('dashboard', [
 			'user' => $user,
 			'register_status' => '5',

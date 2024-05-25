@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('users_info', function (Blueprint $table) {
             $table->id();
-			$table->uuid('clientID')->unique()->nullable();
+			$table->uuid('bind_id')->unique()->nullable();
             $table->enum('accountType', ['Recruiter', 'Employee', 'Organzation'])->nullable();
             $table->integer('countryPhoneCode')->nullable();
             $table->string('mobileNumber')->nullable();
@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->text('address')->nullable();
             $table->integer('zonalCode')->nullable();
+			
+			$table->foreign('bind_id')->references('bind_id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

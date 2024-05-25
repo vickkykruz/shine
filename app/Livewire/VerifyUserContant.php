@@ -6,12 +6,13 @@ use Livewire\Component;
 use App\Services\PhoneValidationService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
+use App\Models\VerifyContact;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redis;
+
 
 class VerifyUserContant extends Component
 {
@@ -56,6 +57,7 @@ class VerifyUserContant extends Component
         {
             $this->phoneVerifiedStatus = 'false';
         }
+		
     }
 	
 	// Public method to access $userInfo
@@ -141,34 +143,35 @@ class VerifyUserContant extends Component
     }
 	
 	public function saveDetails(Request $request)
-{
-    // Retrieve the user information
-    $user = auth()->user();
-    $user_client_id = $user->bind_id;
+	{
+		// Retrieve the authenticated user
+		$user = auth()->user();
+		$userClientId = $user->bind_id;
 
-    // Validate the request inputs
-    $validated = $request->validate([
-        'verifyEmail' => 'required|string',
-        'verifyPhone' => 'required|string',
-    ]);
+		// Validate the request inputs
+		$validated = $request->validate([
+			'verifyEmail' => 'required|string',
+			'verifyPhone' => 'required|string',
+		]);
 
-    // Check if the email and phone are verified
-    if ($validated['verifyEmail'] !== 'Verified' || $validated['verifyPhone'] !== 'Verified') {
-        $errorMessage = 'Ensure you validate your email and mobile number before you continue';
-        return redirect()->back()->with('errorMessage', $errorMessage);
-    } else {
-        // Insert the status of the contact
-        DB::table('verify_contacts')->insert([
-            'clientID' => $user_client_id,
-            'email_verify_status' => $validated['verifyEmail'],
-            'mobile_number_verify_status' => $validated['verifyPhone'],
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+		// Check if the email and phone are verified
+		if ($validated['verifyEmail'] !== 'Verified' || $validated['verifyPhone'] !== 'Verified') {
+			$errorMessage = 'Ensure you validate your email and mobile number before you continue';
+			return redirect()->back()->with('errorMessage', $errorMessage);
+		}
 
-        return redirect()->route('dashboard');
-    }
-}
+		// Use the VerifyContact model to insert or update the contact verification status
+		VerifyContact::updateOrCreate(
+			['bind_id' => $userClientId], // Conditions for matching records
+			[
+				'email_verify_status' => $validated['verifyEmail'],
+				'mobile_number_verify_status' => $validated['verifyPhone'],
+				'updated_at' => now(), // This is typically handled automatically by Eloquent
+			]
+		);
+
+		return redirect()->route('dashboard');
+	}
 
     public function render()
     {

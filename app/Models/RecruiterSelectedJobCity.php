@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use App\Models\RecruiterInfo;
 use App\Models\User;
 
-class VerifyContact extends Model
+class RecruiterSelectedJobCity extends Model
 {
     use HasFactory;
 	
@@ -16,9 +16,9 @@ class VerifyContact extends Model
      *
      * @var string
      */
-    protected $table = 'verify_contacts';
-
-    /**
+    protected $table = 'recruiter_selected_job_cities';
+	
+	/**
      * The primary key associated with the table.
      *
      * @var string
@@ -31,26 +31,26 @@ class VerifyContact extends Model
      * @var bool
      */
     public $incrementing = true;
-
-    /**
+	
+	/**
      * The data type of the primary key.
      *
      * @var string
      */
     protected $keyType = 'int';
-
+	
 	/**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
+        'recruiterInfoId',
         'bind_id',
-        'email_verify_status',
-        'mobile_number_verify_status',
+        'city',
     ];
-
-    /**
+	
+	/**
      * The attributes that should be cast to native types.
      *
      * @var array
@@ -58,8 +58,16 @@ class VerifyContact extends Model
     protected $casts = [
         'bind_id' => 'string',
     ];
-
-   /**
+	
+	/**
+     * Get the recruiter info associated with the selected job country.
+     */
+    public function recruiterInfo()
+    {
+        return $this->belongsTo(RecruiterInfo::class, 'recruiterInfoId');
+    }
+	
+	/**
      * Get the user associated with the selected job country.
      */
     public function user()

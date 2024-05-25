@@ -23,15 +23,15 @@ class UserFormInfo extends Component
 	public function submit_user_info(Request $request)
 	{
 		$validator = Validator::make($request->all(), [
-			'account_type' => 'required',
-			'selectedcountry' => 'required',
-			'selectedstate' => 'required',
+			'account_type' => 'required|string',
+			'selectedcountry' => 'required|string',
+			'selectedstate' => 'required|string',
 			'mobile-input' => 'required|string',
-			'country_phone_code' => 'required',
-			'selectedcity' => 'required',
-			'address' => 'required',
-			'zipcode' => 'required',
-			'user_profile' => ['nullable', 'image', 'mimes:jpeg,png,jpg,', 'max:1024'],
+			'country_phone_code' => 'required|integer',
+			'selectedcity' => 'required|string',
+			'address' => 'required|string',
+			'zipcode' => 'required|string',
+			'user_profile' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:1024'],
 		]);
 
 		if ($validator->fails()) {
@@ -43,20 +43,15 @@ class UserFormInfo extends Component
 			$user = auth()->user();
 			$user_bind_id = $user->bind_id;
 
-			$user = User::where('bind_id', $user_bind_id)->firstOrFail();
-			
 			// Check if a profile photo was uploaded
 			if ($request->hasFile('user_profile')) {
-				
 				// Delete the old profile photo if it exists
 				if ($user->profile_photo_path) {
 					Storage::disk('public')->delete($user->profile_photo_path);
 				}
-				
-				// Exatract the name of the image and the extenction
+
+				// Extract the name of the image and the extension
 				$file = $request->file('user_profile');
-				
-				// Get the original file name and extension
 				$originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 				$extension = $file->getClientOriginalExtension();
 				
@@ -72,34 +67,27 @@ class UserFormInfo extends Component
 				// Get the public URL of the stored image
 				$publicPath = Storage::url($avatarPath);
 				
-				Log::info('Path Image Link: ' . $publicPath);
 				// Update the user's profile photo path
 				$user->profile_photo_path = $publicPath;
 				$user->save();
 			}
-			
+
 			// Insert the information into the database
 			UsersInfo::create([
-				'clientID' => $user_bind_id,
+				'bind_id' => $user_bind_id,  // Ensure this key matches your database column
 				'accountType' => $request->input('account_type'),
 				'countryPhoneCode' => $request->input('country_phone_code'),
 				'mobileNumber' => $request->input('mobile-input'),
-				'phoneNumber' => $request->input('phone-input'), // Handle absence of 'phone-input' gracefully
+				'phoneNumber' => $request->input('phone-input', null),  // Provide a default value if phone-input is not present
 				'country' => $request->input('selectedcountry'),
 				'state' => $request->input('selectedstate'),
 				'city' => $request->input('selectedcity'),
 				'address' => $request->input('address'),
 				'zonalCode' => $request->input('zipcode'),
 			]);
-			
-			// Get the record of the user from users table
-			
 
 			return redirect()->route('dashboard')->with('success', 'User information submitted successfully.');
 		} catch (\Exception $e) {
-			// Log the error for debugging purposes
-			Log::error('Error submitting user info: ' . $e->getMessage());
-
 			return redirect()->route('dashboard')->with('error', 'An error occurred while submitting user information. Please try again later.');
 		}
 	}

@@ -7,6 +7,17 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use App\Models\RecruiterInfo;
+use App\Models\RecruiterSelectedJobCountry;
+use App\Models\RecruiterSelectedJobState;
+use App\Models\RecruiterSelectedJobCity;
+use App\Models\DesiredJob;
+use App\Models\PreferredJob;
+use App\Models\RecruiterSkills;
+use App\Models\RecruiterQualifications;
+use Illuminate\Support\Str;
 
 class RecruiterForm extends Component
 {
@@ -183,7 +194,6 @@ class RecruiterForm extends Component
 		
 		// Add each selected country to the set
 		foreach ($dataCountry as $country) {
-			Log::info($country);
 			Redis::rpush('client_desired_job_country', $country);
 		}
 		
@@ -201,7 +211,6 @@ class RecruiterForm extends Component
 		
 		// Add each selected country to the set
 		foreach ($dataState as $state) {
-			Log::info($state);
 			Redis::rpush('client_desired_job_state', $state);
 		}
 		
@@ -310,6 +319,264 @@ class RecruiterForm extends Component
 		}
 		
 		return response()->json(['message' => 'Data received successfully']);
+	}
+	
+	/**
+	 * Handle the saving of recruiter details.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function saveRecruiterDetails(Request $request)
+	{
+		
+		// Step 1: Validate the initial input fields
+		$validator = Validator::make($request->all(), [
+			'personalBio' => 'required|string',
+			'userCv' => ['required', 'file', 'mimes:pdf,doc', 'max:1024'],
+			'employment_mode' => 'required|string',
+			'desired_job' => 'required|string',
+		]);
+
+		// Check if the initial validation fails
+		if ($validator->fails()) {
+			return back()->withErrors($validator)->withInput();
+		}
+
+		// Step 2: Additional validation based on 'desired_job' input
+		if ($request->input('desired_job') == "yeah") {
+			$desiredJobValidator = Validator::make($request->all(), [
+				'desired-job-title' => 'required|string',
+				'position-role' => 'required|string',
+				'responsibility-level' => 'required|string',
+				'portfolio-url' => 'required|string',
+				'linkedin-url'=> 'required|string',
+			]);
+
+			// Check if the desired job validation fails
+			if ($desiredJobValidator->fails()) {
+				return back()->withErrors($desiredJobValidator)->withInput();
+			}
+
+		} else if ($request->input('desired_job') == "none") {
+			$preferredJobValidator = Validator::make($request->all(), [
+				'industry-sector' => 'required|string',
+				'portfolio-url' => 'required|string',
+				'linkedin-url'=> 'required|string',
+			]);
+
+			// Check if the preferred job validation fails
+			if ($preferredJobValidator->fails()) {
+				return back()->withErrors($preferredJobValidator)->withInput();
+			}
+		}
+
+		// Step 3: Check if the required Redis keys exist and are not empty
+		$listKeys = [
+			'client_desired_job_country',
+			'client_skills',
+			'client_qualifications'
+		];
+		
+		$allListsExistAndNotEmpty = true;
+		foreach ($listKeys as $key) {
+			if (!Redis::exists($key) || count(Redis::lrange($key, 0, -1)) === 0) {
+				$allListsExistAndNotEmpty = false;
+				break;
+			}
+		}
+		
+		// Return error if any Redis list is missing or empty
+		if (!$allListsExistAndNotEmpty) {
+			return back()->withErrors("Internal Error Occurred. Please Try Again")->withInput();
+		}
+
+		// Step 4: Handle file upload for 'userCv'
+		if ($request->hasFile('userCv')) {
+			// Extract the original name and extension of the uploaded file
+			$file = $request->file('userCv');
+			$originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+			$extension = $file->getClientOriginalExtension();
+			
+			// Generate a unique filename using UUID
+			$uniqueFilename = $originalName . '-' . Str::uuid() . '.' . $extension;
+			
+			// Define the storage path
+			$resumePath = 'user_cv/users/' . $uniqueFilename;
+			
+			// Store the file in the 'public' disk
+			$path = $file->storeAs('public/' . 'user_cv/users', $uniqueFilename);
+			
+			// Get the public URL of the stored file
+			$publicPath = Storage::url($resumePath);
+			
+		} else {
+			return back()->withErrors("Internal Error Occurred. Please Try Again")->withInput();
+		}
+
+		// Step 5: Insert the data into the database
+		try {
+			// Retrieve the authenticated user's details
+			$user = auth()->user();
+			$user_bind_id = $user->bind_id;
+			
+			// Create and save the RecruiterInfo entry
+			$recruiterInfo = RecruiterInfo::create([
+				'bind_id' => $user_bind_id,
+				'personal_bio' => $request->input('personalBio'),
+				'resume_path' => $publicPath,
+				'employMode' => $request->input('employment_mode'),
+				'desiredJobQues' => $request->input('desired_job'),
+			]);
+
+			$recruiterInfo->save();
+			$fetchRecruiterInfo = RecruiterInfo::where('bind_id', $user_bind_id)->first();
+			$recruiterInfoId = $fetchRecruiterInfo->id;
+			
+			Log::info('RecruiterInfo Id: ', ['id' => $recruiterInfoId]);
+
+			// Step 6: Save the selected countries, states, and cities from Redis
+			$clientDesiredJobCountry = Redis::lrange('client_desired_job_country', 0, -1);
+			$clientDesiredJobState = Redis::lrange('client_desired_job_state', 0, -1);
+			$clientDesiredJobCity = Redis::lrange('client_desired_job_city', 0, -1);
+
+			// Save countries
+			foreach($clientDesiredJobCountry as $country) {
+				RecruiterSelectedJobCountry::create([
+					'recruiterInfoId' => $recruiterInfoId,
+					'bind_id' => $user_bind_id,
+					'country' => $country
+				]);
+			}
+
+			// Save states
+			if (count($clientDesiredJobState) > 0) {
+				foreach($clientDesiredJobState as $state) {
+					RecruiterSelectedJobState::create([
+						'recruiterInfoId' => $recruiterInfoId,
+						'bind_id' => $user_bind_id,
+						'state' => $state
+					]);
+				}
+				
+				Redis::del('client_desired_job_state');
+			}
+
+			// Save cities
+			if (count($clientDesiredJobCity) > 0) {
+				foreach($clientDesiredJobCity as $city) {
+					RecruiterSelectedJobCity::create([
+						'recruiterInfoId' => $recruiterInfoId,
+						'bind_id' => $user_bind_id,
+						'city' => $city
+					]);
+				}
+				
+				Redis::del('client_desired_job_city');
+			}
+
+			// Delete the Redis keys after saving
+			Redis::del('client_desired_job_country');
+			
+			
+
+			// Step 7: Handle the 'desired_job' input
+			if ($fetchRecruiterInfo->desiredJobQues == "yeah") {
+				// Save desired job information
+				$desiredJobInfo = DesiredJob::create([
+					'recruiterInfoId' => $recruiterInfoId,
+					'bind_id' => $user_bind_id,
+					'desired_job_title' => $request->input('desired-job-title'),
+					'job_position' => $request->input('position-role'),
+					'responsibility_level' => $request->input('responsibility-level'),
+					'portfolio_url' => $request->input('portfolio-url'),
+					'linkedIn_url' => $request->input('linkedin-url'),
+				]);
+
+				$desiredJobInfo->save();
+
+				// Fetch the desired job ID and save skills and qualifications
+				$fetchDesiredJobInfo = DesiredJob::where([
+										'recruiterInfoId' => $recruiterInfoId,
+										'bind_id' => $user_bind_id,
+									])->first();
+				$desiredJobInfoId = $fetchDesiredJobInfo->id;
+
+				// Save skills
+				$clientSkills = Redis::lrange('client_skills', 0, -1);
+				foreach($clientSkills as $skills) {
+					RecruiterSkills::create([
+						'recruiterInfoId' => $recruiterInfoId,
+						'bind_id' => $user_bind_id,
+						'table_type' => "DesiredJob",
+						'job_id' => $desiredJobInfoId,
+						'skill' => $skills,
+					]);
+				}
+
+				// Save qualifications
+				$clientQualifications = Redis::lrange('client_qualifications', 0, -1);
+				foreach($clientQualifications as $qualifications) {
+					RecruiterSkills::create([
+						'recruiterInfoId' => $recruiterInfoId,
+						'bind_id' => $user_bind_id,
+						'table_type' => "DesiredJob",
+						'job_id' => $desiredJobInfoId,
+						'qualification' => $qualifications,
+					]);
+				}
+			} else if ($fetchRecruiterInfo->desiredJobQues == "none") {
+				// Save preferred job information
+				$preferredJobInfo = PreferredJob::create([
+					'recruiterInfoId' => $recruiterInfoId,
+					'bind_id' => $user_bind_id,
+					'industry_or_sector' => $request->input('industry-sector'),
+					'portfolio_url' => $request->input('portfolio-url'),
+					'linkedIn_url' => $request->input('linkedin-url'),
+				]);
+
+				$preferredJobInfo->save();
+
+				// Fetch the preferred job ID and save skills and qualifications
+				$fetchPreferredJobInfo = PreferredJob::where([
+										'recruiterInfoId' => $recruiterInfoId,
+										'bind_id' => $user_bind_id,
+									])->first();
+				$preferredJobInfoId = $fetchPreferredJobInfo->id;
+
+				// Save skills
+				$clientSkills = Redis::lrange('client_skills', 0, -1);
+				foreach($clientSkills as $skills) {
+					RecruiterSkills::create([
+						'recruiterInfoId' => $recruiterInfoId,
+						'bind_id' => $user_bind_id,
+						'table_type' => "PreferredJob",
+						'job_id' => $preferredJobInfoId,
+						'skill' => $skills,
+					]);
+				}
+
+				// Save qualifications
+				$clientQualifications = Redis::lrange('client_qualifications', 0, -1);
+				foreach($clientQualifications as $qualifications) {
+					RecruiterSkills::create([
+						'recruiterInfoId' => $recruiterInfoId,
+						'bind_id' => $user_bind_id,
+						'table_type' => "PreferredJob",
+						'job_id' => $preferredJobInfoId,
+						'qualification' => $qualifications,
+					]);
+				}
+			}
+
+			// Redirect to the dashboard with a success message
+			return redirect()->route('dashboard')->with('success', 'User information submitted successfully.');
+			
+		} catch (\Exception $e) {
+			// Log the error and redirect to the dashboard with an error message
+			Log::error('Error submitting user info: ' . $e->getMessage());
+			return redirect()->route('dashboard')->with('error', 'An error occurred while submitting user information. Please try again later.');
+		}
 	}
 	
     public function render()

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class UsersInfo extends Model
 {
@@ -44,7 +45,7 @@ class UsersInfo extends Model
      * @var array
      */
     protected $fillable = [
-        'clientID',
+        'bind_id',
         'accountType',
         'countryPhoneCode',
         'mobileNumber',
@@ -62,25 +63,16 @@ class UsersInfo extends Model
      * @var array
      */
     protected $casts = [
-        'clientID' => 'string',
+        'bind_id' => 'string',
         'countryPhoneCode' => 'integer',
         'zonalCode' => 'integer',
     ];
 	
 	/**
-     * The "booted" method of the model.
-     *
-     * @return void
+     * Get the user associated with the selected job country.
      */
-    protected static function boot()
+    public function user()
     {
-        parent::boot();
-
-        // Automatically generate UUID for clientID when creating a new model
-        static::creating(function ($model) {
-            if (empty($model->clientID)) {
-                $model->clientID = (string) Str::uuid();
-            }
-        });
+        return $this->belongsTo(User::class, 'bind_id', 'bind_id');
     }
 }

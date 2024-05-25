@@ -11,7 +11,7 @@
                             <img class="h-5 w-5 me-2" src="https://flagsapi.com/{{ $country['country_short_name'] }}/flat/32.png"> +{{ $country['country_phone_code'] }}
                         </button>
                         <div class="relative w-full">
-                            <input type="number" wire:model="mobileNumber" id="mobile-input" name="mobile-input" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" maxlength="10" placeholder="123-456-7890" required>
+                            <input type="number" wire:model.live="mobileNumber" id="mobile-input" name="mobile-input" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" maxlength="10" placeholder="123-456-7890" required>
 							@error('mobileNumber') <span class="error">{{ $message }}</span> @enderror
 						</div>
                     </div>
@@ -24,7 +24,7 @@
                             <img class="h-5 w-5 me-2" src="https://flagsapi.com/{{ $country['country_short_name'] }}/flat/32.png"> +{{ $country['country_phone_code'] }}
                         </button>
                         <div class="relative w-full">
-                            <input type="number" wire:model="phoneNumber" id="phone-input" name="phone-input" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" maxlength="10" placeholder="123-456-7890">
+                            <input type="number" wire:model.live="phoneNumber" id="phone-input" name="phone-input" class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-0 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" maxlength="10" placeholder="123-456-7890">
 							@error('phoneNumber') <span class="error">{{ $message }}</span> @enderror
 						</div>
                     </div>

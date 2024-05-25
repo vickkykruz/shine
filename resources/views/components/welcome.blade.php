@@ -9,6 +9,9 @@
 		@case(4)
             @livewire('company-info', ['userData' => $userData, 'userInfo' => $userInfo])
         @break
+		@case(5)
+			@livewire('registration-success', ['userData' => $userData, 'userInfo' => $userInfo])
+		@break
 		
         @default
             @livewire('page-error')

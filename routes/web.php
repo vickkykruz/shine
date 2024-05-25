@@ -26,6 +26,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
 	Route::post('/dashboard/submit_user_info', [UserFormInfo::class, 'submit_user_info'])->name('post_request_user_info');
 	Route::post('/dashboard/submit_contact_status', [VerifyUserContant::class, 'saveDetails'])->name('post_request_contact_verify_status');
+	
+	/* START HIDDEN AJAX REQUEST */
 	Route::post('/update-country', [RecruiterForm::class, 'addCountry'])->name('add.country');
 	Route::get('/fetch-states', [RecruiterForm::class, 'fetchStates'])->name('get.states');
 	Route::post('/update-states', [RecruiterForm::class, 'addState'])->name('add.state');
@@ -35,4 +37,10 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 	Route::get('/show-job-decision', [RecruiterForm::class, 'showJobDecision'])->name('show.job.decision');
 	Route::post('/update-skills', [RecruiterForm::class, 'updateSkills'])->name('update.skills');
 	Route::post('/update-qualifications', [RecruiterForm::class, 'updateQualifications'])->name('update.qualifications');
+	/* END HIDDEN AJAX REQUEST */
+	
+	Route::post('/dashboard/submit_recuriter_info', [RecruiterForm::class, 'saveRecruiterDetails'])->name('post_request_recuriter_info');
+	
+	// dashboard
+	Route::get('/counter', Dashboard::class)->name('home');
 });
