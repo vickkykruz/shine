@@ -1,7 +1,7 @@
 <div>
     {{-- A good traveler has no fixed plans and is not intent upon arriving. --}}
 	 <nav
-		class="position-fixed top-2 start-0 end-0 layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+		class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
 		id="layout-navbar"
 	  >
 		<div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -52,7 +52,7 @@
 					<div class="d-flex">
 					  <div class="flex-shrink-0 me-3">
 						<div class="avatar avatar-online">
-						  <img src="../assets/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+						  <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt class="w-px-40 h-auto rounded-circle" />
 						</div>
 					  </div>
 					  <div class="flex-grow-1">

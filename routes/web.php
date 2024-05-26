@@ -12,6 +12,8 @@ use App\Http\Controllers\UserController\NavigationController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/services', [HomeController::class, 'service'])->name('services');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
 // PROVIDERS ROUTERS
 // GOOGLE AUTH PROVIDER ROUTER

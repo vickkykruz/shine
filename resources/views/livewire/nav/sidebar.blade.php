@@ -3,10 +3,8 @@
 	<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
 	  <div class="app-brand demo">
 		<a href="index.html" class="app-brand-link">
-		  <span class="app-brand-logo demo">
-			<img src="" alt="logo" />
-		  </span>
-		  <span class="app-brand-text demo menu-text fw-bolder ms-2">Shine</span>
+		  <span class="app-brand-logo demo"></span>
+		  <x-application-mark class="block h-9 w-auto" />
 		</a>
 
 		<a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -154,12 +152,22 @@
 		<li class="menu-item">
 		  <a href="javascript:void(0);" class="menu-link menu-toggle">
 			<i class="menu-icon tf-icons bx bxs-user-account"></i>
-			<div data-i18n="Form Elements">Profile</div>
+			<div data-i18n="Form Elements">Account</div>
 		  </a>
 		  <ul class="menu-sub">
 			<li class="menu-item">
 			  <a href="forms-basic-inputs.html" class="menu-link">
+				<div data-i18n="Basic Inputs">Profile</div>
+			  </a>
+			</li>
+			<li class="menu-item">
+			  <a href="forms-basic-inputs.html" class="menu-link">
 				<div data-i18n="Basic Inputs">API's</div>
+			  </a>
+			</li>
+			<li class="menu-item">
+			  <a href="forms-basic-inputs.html" class="menu-link">
+				<div data-i18n="Basic Inputs">Change Password</div>
 			  </a>
 			</li>
 		  </ul>
@@ -167,12 +175,12 @@
 		
 		<li class="menu-item">
 		  <a
-			href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
-			target="_blank"
+			href="{{ route('logout') }}"
+            @click.prevent="$root.submit();"
 			class="menu-link"
 		  >
 			<i class="menu-icon tf-icons bx bx-log-out-circle"></i>
-			<div data-i18n="Logout">Logout</div>
+			<div data-i18n="Logout">{{ __('Log Out') }}</div>
 		  </a>
 		</li>
 	  </ul>

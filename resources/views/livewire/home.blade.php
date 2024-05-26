@@ -3,7 +3,7 @@
 	<div class="container-xxl flex-grow-1 container-p-y">
 		<div class="row">
 			<!-- Main Container -->
-			<div class="col-lg-8 mb-4 order-0" style="margin-top: 5rem;">
+			<div class="col-lg-7 mb-4 order-0">
 				<!-- Congratulations Card -->
 				<div class="card">
 					<div class="d-flex align-items-end row">
@@ -169,7 +169,7 @@
 			</div>
 
 			<!-- Aside Container -->
-			<div class="col-lg-4 col-md-12 order-1 position-fixed top-0 end-0 aside" style="margin-top:6.2rem;">
+			<div class="col-lg-5 col-md-4 order-1 aside" >
 			  <div class="card">
 				<div class="card-body">
 				  <h4 class="card-title">Profile Card</h4>
