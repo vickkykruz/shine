@@ -7,6 +7,8 @@ use App\Http\Controllers\UserController\DashBoardController;
 use App\Livewire\UserFormInfo;
 use App\Livewire\VerifyUserContant;
 use App\Livewire\RecruiterForm;
+use App\Livewire\RegistrationSuccess;
+use App\Http\Controllers\UserController\NavigationController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('index');
@@ -23,9 +25,13 @@ Route::get('/auth/{provider}/callback', [Providers::class, 'handleProviderCallba
 
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',])->group(function () {
+	
+	/* CLIENT REGISTRATION ROUTE */
     Route::get('/dashboard', [DashBoardController::class, 'index'])->name('dashboard');
 	Route::post('/dashboard/submit_user_info', [UserFormInfo::class, 'submit_user_info'])->name('post_request_user_info');
 	Route::post('/dashboard/submit_contact_status', [VerifyUserContant::class, 'saveDetails'])->name('post_request_contact_verify_status');
+	Route::post('/dashboard/submit_recuriter_info', [RecruiterForm::class, 'saveRecruiterDetails'])->name('post_request_recuriter_info');
+	Route::post('/dashboard/update_registration_status', [RegistrationSuccess::class, 'updateRegistrationStatus'])->name('post_request_update_registration_status');
 	
 	/* START HIDDEN AJAX REQUEST */
 	Route::post('/update-country', [RecruiterForm::class, 'addCountry'])->name('add.country');
@@ -39,8 +45,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 	Route::post('/update-qualifications', [RecruiterForm::class, 'updateQualifications'])->name('update.qualifications');
 	/* END HIDDEN AJAX REQUEST */
 	
-	Route::post('/dashboard/submit_recuriter_info', [RecruiterForm::class, 'saveRecruiterDetails'])->name('post_request_recuriter_info');
-	
-	// dashboard
-	Route::get('/counter', Dashboard::class)->name('home');
+	/* CLIENT DASHBOARD ROUTES */
+	Route::get('/pages/home', [NavigationController::class, 'home'])->name('home_page');
 });

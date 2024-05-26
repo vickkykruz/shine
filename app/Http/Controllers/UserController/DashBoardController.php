@@ -68,9 +68,6 @@ class DashBoardController extends Controller
 		}
 
 		// User is fully registered, redirect to the welcome page
-		return view('dashboard', [
-			'user' => $user,
-			'register_status' => '5',
-		]);
+		return view('pages.home', ['message' => 'You are welcome']);
 	}
 }
