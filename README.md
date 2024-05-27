@@ -1,4 +1,4 @@
-<p align="center"><a href="https://shine.com" target="_blank"><img src="https://ibb.co/P67XTnL" width="400" alt="Shine Logo"></a></p>
+<p align="center"><a href="https://shine.com" target="_blank"><img src="https://i.ibb.co/hmPQXj6/logo-removebg-preview.png" width="400" alt="Shine Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
