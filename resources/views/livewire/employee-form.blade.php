@@ -1,7 +1,7 @@
 <div>
     {{-- Do your work, then step back. --}}
 	<div class="mt-2">
-		<form action="{{ route('post_request_recuriter_info') }}" method="POST" enctype="multipart/form-data">
+		<form action="{{ route('post_request_employee_info') }}" method="POST" enctype="multipart/form-data">
 			@csrf
 			<div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
 			
@@ -21,7 +21,7 @@
 							
 							<div class="md:col-span-5 mb-2">
 								<label for="message" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Position / Job Title</label>
-								<input id="message" name="personalBio" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Position / Job Title" />
+								<input id="message" name="jobTitle" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Position / Job Title" />
 							</div>
 							
 					
@@ -31,13 +31,13 @@
 									<!-- Mode of Employment -->
 									<div class="w-full md:w-1/2">
 										<label for="message" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Department</label>
-								<input id="message" name="personalBio" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Department" />
+								<input id="message" name="department" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Department" />
 									</div>
 									
 									<!-- Desired Job -->
 									<div class="w-full md:w-1/2">
 										<label for="message" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Upload Working ID</label>
-										<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" aria-describedby="file_input_help" name="userCv" id="file_input" type="file" />
+										<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" aria-describedby="file_input_help" name="userWorkingId" id="file_input" type="file" />
 									</div>
 								</div>
 							</div>
@@ -47,13 +47,13 @@
 									<!-- Mode of Employment -->
 									<div class="w-full md:w-1/2">
 										<label for="message" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Start Date</label>
-										<input id="message" type="date" name="personalBio" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Department" />
+										<input id="message" type="date" name="startDate" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Department" />
 									</div>
 									
 									<!-- Desired Job -->
 									<div class="w-full md:w-1/2">
 										<label for="message" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">End Date</label>
-										<input id="message" type="date" name="personalBio" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Department" />
+										<input id="message" type="date" name="endDate" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter Department" />
 									</div>
 								</div>
 							</div>
@@ -89,7 +89,7 @@
 									<!-- Desired Job -->
 									<div class="w-full md:w-1/2">
 										<label class="block mb-1 text-sm font-semibold text-gray-900" for="desired_job">Community Involvement Interests</label>
-										<select id="desired_job" name="desired_job" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+										<select id="desired_job" name="interest" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
 											<option value="None">Choose an Option</option>
 											<option value="Volunteer Work">Volunteer Work</option>
 											<option value="Community Projects">Community Projects</option>
@@ -111,18 +111,18 @@
 									<!-- Mode of Employment -->
 									<div class="w-full md:w-1/2">
 										<label class="block mb-1 text-sm font-semibold text-gray-900" for="desired_job">Document Type</label>
-										<select id="desired_job" name="desired_job" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+										<select id="desired_job" name="documentType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
 											<option value="None">Choose an Option</option>
-											<option value="Volunteer Work">ID Card</option>
-											<option value="Community Projects">Driver License</option>
-											<option value="Educational Outreach">Passport</option>
+											<option value="ID Card">ID Card</option>
+											<option value="Driver License">Driver License</option>
+											<option value="Passport">Passport</option>
 										</select>
 									</div>
 									
 									<!-- Desired Job -->
 									<div class="w-full md:w-1/2">
 										<label class="block mb-1 text-sm font-semibold text-gray-900" for="file_input">Upload Document</label>
-										<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" aria-describedby="file_input_help" name="userCv" id="file_input" type="file">
+										<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50" aria-describedby="file_input_help" name="userIdenityDoc" id="file_input" type="file">
 										<small class="text-xs text-gray-900" id="file_input_help">Let's it be clear and visiable</small>
 									</div>
 								</div>
@@ -151,7 +151,7 @@
 							<div class="md:col-span-5 mb-2">
 								<div class="flex items-center mb-4">
 									<input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-									<label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I have agree to the <a href="#">Terms and Conditions</a></label>
+									<label for="default-checkbox" name="agree_to_terms" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I have agree to the <a href="#">Terms and Conditions</a></label>
 								</div>
 							</div>
 
@@ -170,6 +170,7 @@
 	</div>
 	<script>
 		// Handle Skills and Quanlifications
+		const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 		let DesiredSkills = document.querySelector('#DesiredSkills');
 		let DesiredQualifications = document.querySelector('#DesiredQualifications');
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController\DashBoardController;
 use App\Livewire\UserFormInfo;
 use App\Livewire\VerifyUserContant;
 use App\Livewire\RecruiterForm;
+use App\Livewire\EmployeeForm;
 use App\Livewire\RegistrationSuccess;
 use App\Http\Controllers\UserController\NavigationController;
 
@@ -33,6 +34,7 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 	Route::post('/dashboard/submit_user_info', [UserFormInfo::class, 'submit_user_info'])->name('post_request_user_info');
 	Route::post('/dashboard/submit_contact_status', [VerifyUserContant::class, 'saveDetails'])->name('post_request_contact_verify_status');
 	Route::post('/dashboard/submit_recuriter_info', [RecruiterForm::class, 'saveRecruiterDetails'])->name('post_request_recuriter_info');
+	Route::post('/dashboard/submit_employee_info', [EmployeeForm::class, 'saveRecruiterDetails'])->name('post_request_employee_info');
 	Route::post('/dashboard/update_registration_status', [RegistrationSuccess::class, 'updateRegistrationStatus'])->name('post_request_update_registration_status');
 	
 	/* START HIDDEN AJAX REQUEST */

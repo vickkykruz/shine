@@ -8,6 +8,7 @@ use App\Models\UsersInfo;
 use App\Models\VerifyContact;
 use Illuminate\Contracts\View\View;
 use App\Models\RecruiterInfo;
+use App\Models\EmplyoeeForm;
 
 class DashBoardController extends Controller
 {
@@ -32,8 +33,9 @@ class DashBoardController extends Controller
 					// Check if the user has verified their contact information
 					$clientRecruiterStatus = RecruiterInfo::where('bind_id', $userClientId)->first();
 					// If employe and orgainastion ....
+					$clientEmployeeStatus = EmplyoeeForm::where('bind_id', $userClientId)->first();
 					
-					if ($clientRecruiterStatus) {
+					if ($clientRecruiterStatus || $clientEmployeeStatus) {
 						
 						// User has completed all steps, redirect to the company info
 						return view('dashboard', [

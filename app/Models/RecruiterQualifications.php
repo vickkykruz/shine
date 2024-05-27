@@ -43,7 +43,6 @@ class RecruiterQualifications extends Model
      * @var array
      */
     protected $fillable = [
-        'recruiterInfoId',
         'bind_id',
         'table_type',
         'job_id',
@@ -65,14 +64,6 @@ class RecruiterQualifications extends Model
 	public function job()
     {
         return $this->morphTo(null, 'table_type', 'job_id');
-    }
-	
-	/**
-     * Get the recruiter info associated with the selected job country.
-     */
-    public function recruiterInfo()
-    {
-        return $this->belongsTo(RecruiterInfo::class, 'recruiterInfoId');
     }
 	
 	/**

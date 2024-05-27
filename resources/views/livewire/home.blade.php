@@ -9,7 +9,7 @@
 					<div class="d-flex align-items-end row">
 					<div class="col-sm-7">
 						<div class="card-body">
-						<h5 class="card-title text-primary">Congratulations John! 🎉</h5>
+						<h5 class="card-title text-primary">Congratulations {{ $user->name }}! 🎉</h5>
 						<p class="mb-4">
 							You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in
 							your profile.
@@ -38,7 +38,13 @@
 						
 							<div class="timeline-comment-box mt-3">
 							<div class="user">
-								<img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt>
+								<img src="{{ $user->profile_photo_path ?
+								(Str::startsWith($user->profile_photo_path, ['http', 'https']) ?
+									$user->profile_photo_path :
+									asset($user->profile_photo_path)
+								) :
+								asset('build/assets/images/Liza-happy-cat-with-laptop-in-christmas-costume-drinking-tea-2f6120ee-b8e0-4f56-8d70-e0bad66f07ee-1.jpg')
+							}}" alt>
 							</div>
 							<div class="input flex-grow-1">
 								<form action>
@@ -92,7 +98,13 @@
 								</div>
 								<div class="timeline-comment-box mt-3">
 								<div class="user">
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt>
+									<img src="{{ $user->profile_photo_path ?
+								(Str::startsWith($user->profile_photo_path, ['http', 'https']) ?
+									$user->profile_photo_path :
+									asset($user->profile_photo_path)
+								) :
+								asset('build/assets/images/Liza-happy-cat-with-laptop-in-christmas-costume-drinking-tea-2f6120ee-b8e0-4f56-8d70-e0bad66f07ee-1.jpg')
+							}}" alt>
 								</div>
 								<div class="input flex-grow-1">
 									<form action>
@@ -145,7 +157,13 @@
 								</div>
 								<div class="timeline-comment-box mt-3">
 								<div class="user">
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt>
+									<img src="{{ $user->profile_photo_path ?
+										(Str::startsWith($user->profile_photo_path, ['http', 'https']) ?
+											$user->profile_photo_path :
+											asset($user->profile_photo_path)
+										) :
+										asset('build/assets/images/Liza-happy-cat-with-laptop-in-christmas-costume-drinking-tea-2f6120ee-b8e0-4f56-8d70-e0bad66f07ee-1.jpg')
+									}}" alt>
 								</div>
 								<div class="input flex-grow-1">
 									<form action>
@@ -175,10 +193,16 @@
 				  <h4 class="card-title">Profile Card</h4>
 				  <div class="d-flex align-items-center" style="margin-left: -10px;">
 					<div class="image" style="margin-right: 5px;">
-					  <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=80" class="rounded">
+					  <img src="{{ $user->profile_photo_path ?
+								(Str::startsWith($user->profile_photo_path, ['http', 'https']) ?
+									$user->profile_photo_path :
+									asset($user->profile_photo_path)
+								) :
+								asset('build/assets/images/Liza-happy-cat-with-laptop-in-christmas-costume-drinking-tea-2f6120ee-b8e0-4f56-8d70-e0bad66f07ee-1.jpg')
+							}}" class="rounded">
 					</div>
 					<div class="ml-3 w-100">
-					  <h4 class="mb-0 mt-0">Edward Victor</h4>
+					  <h4 class="mb-0 mt-0">{{ $user->name }}</h4>
 					  <span>Recruiter</span>
 					  <div class="p-2 mt-1 d-flex justify-content-between rounded stats">
 						<div class="d-flex flex-column text-center">

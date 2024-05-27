@@ -7,6 +7,9 @@
 		<meta name="base-url" content="{{ url('/') }}">
 
         <title>{{ config('app.name', 'Shine') }}</title>
+		
+		{{-- Favicon --}}
+        <link rel="shortcut icon" href="{{ asset('build/assets/images/favicon.png') }}" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

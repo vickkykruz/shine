@@ -46,7 +46,6 @@ class RecruiterSkills extends Model
      * @var array
      */
     protected $fillable = [
-        'recruiterInfoId',
         'bind_id',
         'table_type',
         'job_id',
@@ -70,13 +69,6 @@ class RecruiterSkills extends Model
         return $this->morphTo(null, 'table_type', 'job_id');
     }
 	
-	/**
-     * Get the recruiter info associated with the selected job country.
-     */
-    public function recruiterInfo()
-    {
-        return $this->belongsTo(RecruiterInfo::class, 'recruiterInfoId');
-    }
 	
 	/**
      * Get the user associated with the selected job country.

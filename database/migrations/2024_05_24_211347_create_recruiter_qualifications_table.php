@@ -13,14 +13,12 @@ return new class extends Migration
     {
         Schema::create('recruiter_qualifications', function (Blueprint $table) {
             $table->id();
-			$table->unsignedBigInteger('recruiterInfoId')->nullable();
             $table->uuid('bind_id')->nullable();
-			$table->enum('table_type', ['DesiredJob', 'PreferredJob'])->nullable();
+			$table->enum('table_type', ['DesiredJob', 'PreferredJob', 'EmployeeTable'])->nullable();
 			$table->unsignedBigInteger('job_id')->nullable();
 			$table->string('qualification')->nullable();
 			
 			// Foreign key constraints
-            $table->foreign('recruiterInfoId')->references('id')->on('recruiter_info')->onDelete('cascade');
             $table->foreign('bind_id')->references('bind_id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

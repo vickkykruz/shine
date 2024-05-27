@@ -4,20 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User; 
+use App\Models\User;
 
-class RecruiterInfo extends Model
+class EmplyoeeForm extends Model
 {
     use HasFactory;
 	
-	 /**
+	/**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'recruiter_info';
-
-    /**
+    protected $table = 'emplyoee_form';
+	
+	/**
      * The primary key associated with the table.
      *
      * @var string
@@ -45,10 +45,17 @@ class RecruiterInfo extends Model
      */
     protected $fillable = [
         'bind_id',
-        'personal_bio',
-        'resume_path',
-        'employMode',
-        'desiredJobQues',
+		'personal_bio',
+		'job_title',
+        'department',
+        'company_id_path',
+        'start_date',
+		'end_date',
+		'employment_mode',
+		'interest',
+		'identity_type',
+		'identity_path',
+		'linkedin_url',
 		'argement_con',
     ];
 	

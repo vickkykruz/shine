@@ -18,6 +18,7 @@ return new class extends Migration
 			$table->string('resume_path', 2048)->nullable();
 			$table->enum('employMode', ['Full', 'Part', 'Contract', 'Temporary'])->nullable();
 			$table->enum('desiredJobQues', ['yeah', 'none'])->nullable();
+			$table->enum('argement_con', ['Yes', 'No'])->nullable();
 			
 			$table->foreign('bind_id')->references('bind_id')->on('users')->onDelete('cascade');
             $table->timestamps();

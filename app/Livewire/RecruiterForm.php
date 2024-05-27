@@ -331,11 +331,13 @@ class RecruiterForm extends Component
 	{
 		
 		// Step 1: Validate the initial input fields
+		
 		$validator = Validator::make($request->all(), [
 			'personalBio' => 'required|string',
 			'userCv' => ['required', 'file', 'mimes:pdf,doc', 'max:1024'],
 			'employment_mode' => 'required|string',
 			'desired_job' => 'required|string',
+			
 		]);
 
 		// Check if the initial validation fails
@@ -427,6 +429,7 @@ class RecruiterForm extends Component
 				'resume_path' => $publicPath,
 				'employMode' => $request->input('employment_mode'),
 				'desiredJobQues' => $request->input('desired_job'),
+				'argement_con' => $request->input('agree_to_terms'),
 			]);
 
 			$recruiterInfo->save();
@@ -506,7 +509,6 @@ class RecruiterForm extends Component
 				$clientSkills = Redis::lrange('client_skills', 0, -1);
 				foreach($clientSkills as $skills) {
 					RecruiterSkills::create([
-						'recruiterInfoId' => $recruiterInfoId,
 						'bind_id' => $user_bind_id,
 						'table_type' => "DesiredJob",
 						'job_id' => $desiredJobInfoId,
@@ -518,7 +520,6 @@ class RecruiterForm extends Component
 				$clientQualifications = Redis::lrange('client_qualifications', 0, -1);
 				foreach($clientQualifications as $qualifications) {
 					RecruiterSkills::create([
-						'recruiterInfoId' => $recruiterInfoId,
 						'bind_id' => $user_bind_id,
 						'table_type' => "DesiredJob",
 						'job_id' => $desiredJobInfoId,
@@ -548,7 +549,6 @@ class RecruiterForm extends Component
 				$clientSkills = Redis::lrange('client_skills', 0, -1);
 				foreach($clientSkills as $skills) {
 					RecruiterSkills::create([
-						'recruiterInfoId' => $recruiterInfoId,
 						'bind_id' => $user_bind_id,
 						'table_type' => "PreferredJob",
 						'job_id' => $preferredJobInfoId,
@@ -560,7 +560,6 @@ class RecruiterForm extends Component
 				$clientQualifications = Redis::lrange('client_qualifications', 0, -1);
 				foreach($clientQualifications as $qualifications) {
 					RecruiterSkills::create([
-						'recruiterInfoId' => $recruiterInfoId,
 						'bind_id' => $user_bind_id,
 						'table_type' => "PreferredJob",
 						'job_id' => $preferredJobInfoId,
