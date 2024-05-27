@@ -1,9 +1,10 @@
+/* Import Css */
+@import url('loader.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Import Css */
-@import url('loader.css');
 
 [x-cloak] {
     display: none;
