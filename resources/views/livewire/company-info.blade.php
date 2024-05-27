@@ -75,7 +75,7 @@
             @livewire('recruiter-form')
             @break
         @case("Employee")
-
+			@livewire('employee-form')
             @break
         @case("Organzation")
 
