@@ -1,4 +1,4 @@
-<p align="center"><a href="https://shine.com" target="_blank"><img src="https://pouch.jumpshare.com/preview/6XthFXsBaEjwo-byjEy354bh6sCCvuFI2omwdST_PkJ0R8jBp3wSo0Yuxe7PWcc9pKHe4akruJxneOT2kxKl8SOTNXSjq2L2EAgID7_w5Kw" width="400" alt="Shine Logo"></a></p>
+<p align="center"><a href="https://shine.com" target="_blank"><img src="https://ibb.co/P67XTnL" width="400" alt="Shine Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
